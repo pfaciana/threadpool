@@ -13,6 +13,8 @@ export { TaskPool, StatusType, StatusAllField, round, } from './../pool-status.t
 export { WebFunctionThread } from './function-thread.ts';
 export { WebFunctionPool } from './function-pool.ts';
 export { importTaskWebWorker, importWebWorker, importPersistentWebWorker, setWorkerUrl, getWorkerUrl, } from './main-thread.ts';
+// Force JSR to build the JS version of this file
+export {} from './worker-thread.ts';
 /**
  * Utility functions and types
  *

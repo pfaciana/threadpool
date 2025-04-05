@@ -34,6 +34,9 @@ export {
 	type WorkerOptions,
 } from './main-thread.ts'
 
+// Force JSR to build the JS version of this file
+export {} from './worker-thread.ts'
+
 /**
  * Utility functions and types
  *

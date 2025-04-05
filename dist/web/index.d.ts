@@ -13,6 +13,7 @@ export { TaskPool, StatusType, StatusAllField, round, type CountStatusResponse, 
 export { WebFunctionThread } from './function-thread.js';
 export { WebFunctionPool, type WebFunctionPoolOptions } from './function-pool.js';
 export { importTaskWebWorker, importWebWorker, importPersistentWebWorker, setWorkerUrl, getWorkerUrl, type WorkerOptions, } from './main-thread.js';
+export {} from './worker-thread.js';
 /**
  * Utility functions and types
  *

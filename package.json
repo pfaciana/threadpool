@@ -1,6 +1,6 @@
 {
 	"name": "@renderdev/threadpool",
-	"version": "0.1.2",
+	"version": "0.1.3",
 	"description": "Quickly run CPU-intensive tasks in parallel across all JavaScript environments with a unified, type-safe API",
 	"license": "MIT",
 	"type": "module",
