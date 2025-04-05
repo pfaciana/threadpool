@@ -52,3 +52,4 @@ const sendMessage = async (message) => {
 sendMessage(workerData);
 // Listen for additional messages from the main thread
 parentPort?.on('message', sendMessage);
+export {};

@@ -1149,6 +1149,8 @@ if (!!self.DedicatedWorkerGlobalScope) {
 		ports[0].start()
 	})
 }
+
+export {}
 `);
 /**
  * Gets the currently set worker URL or falls back to the default data URL.
@@ -1249,7 +1251,10 @@ if (!!self.DedicatedWorkerGlobalScope) {
         executeImmediately: false,
         WorkerType: messageOptions?.WorkerType ?? Worker,
         workerFile: getWorkerUrl(),
-        workerOptions,
+        workerOptions: {
+            type: 'module',
+            ...workerOptions
+        },
         workerPromise,
         messageOptions: {
             ...messageOptions,
@@ -1290,7 +1295,10 @@ if (!!self.DedicatedWorkerGlobalScope) {
         executeImmediately: true,
         WorkerType: messageOptions?.WorkerType ?? Worker,
         workerFile: getWorkerUrl(),
-        workerOptions,
+        workerOptions: {
+            type: 'module',
+            ...workerOptions
+        },
         workerPromise,
         messageOptions: {
             ...messageOptions,

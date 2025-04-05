@@ -48,3 +48,5 @@ if (!!self.DedicatedWorkerGlobalScope) {
 		ports[0].start()
 	})
 }
+
+export {}

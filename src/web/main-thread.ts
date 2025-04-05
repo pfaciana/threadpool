@@ -27,6 +27,8 @@ if (!!self.DedicatedWorkerGlobalScope) {
 		ports[0].start()
 	})
 }
+
+export {}
 `)
 
 /**
@@ -179,7 +181,7 @@ export const importTaskWebWorker = <T>(filename: string | URL, workerOptions: Wo
 		executeImmediately: false,
 		WorkerType: (messageOptions?.WorkerType ?? Worker) as any,
 		workerFile: getWorkerUrl(),
-		workerOptions,
+		workerOptions: { type: 'module', ...workerOptions },
 		workerPromise,
 		messageOptions: { ...messageOptions, terminate: true },
 	})
@@ -218,7 +220,7 @@ export const importWebWorker = <T>(filename: string | URL, workerOptions: Worker
 		executeImmediately: true,
 		WorkerType: (messageOptions?.WorkerType ?? Worker) as any,
 		workerFile: getWorkerUrl(),
-		workerOptions,
+		workerOptions: { type: 'module', ...workerOptions },
 		workerPromise,
 		messageOptions: { ...messageOptions, terminate: true },
 	})
@@ -275,7 +277,7 @@ export const importPersistentWebWorker = <T>(filename: string | URL, workerOptio
 		terminateKey: messageOptions?.terminateKey,
 		WorkerType: (messageOptions?.WorkerType ?? Worker) as any,
 		workerFile: getWorkerUrl(),
-		workerOptions,
+		workerOptions: { type: 'module', ...workerOptions },
 		workerPromise,
 		messageOptions: { ...messageOptions, terminate: false },
 	})
