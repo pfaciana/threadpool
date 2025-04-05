@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="250 280 650 220" preserveAspectRatio="xMidYMid meet">
+    <title>Cross-Environment Compatible</title>
+    <defs>
+        <!-- Color Palette -->
+        <style>
+            :root {
+            --gray: #888;
+            --dark-blue: #3f3d56;
+            --dark-green: #2e8555;
+            --medium-green: #3ecc5f;
+            --bright-green: #44d860;
+            --white: #fff;
+            --light-gray: #f2f2f2;
+            --yellow: #ffde69;
+            --red: #ff6b6b;
+            --light-blue: #e0e0ff;
+            }
+        </style>
+
+        <!-- Gradients -->
+        <linearGradient id="serverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="var(--dark-blue)"/>
+            <stop offset="100%" stop-color="var(--dark-blue)"/>
+        </linearGradient>
+        <linearGradient id="browserGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="var(--dark-blue)"/>
+            <stop offset="100%" stop-color="var(--dark-blue)"/>
+        </linearGradient>
+        <radialGradient id="hubGradient" cx="50%" cy="50%" r="50%" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="var(--bright-green)"/>
+            <stop offset="70%" stop-color="var(--medium-green)"/>
+            <stop offset="100%" stop-color="var(--dark-green)"/>
+        </radialGradient>
+        <linearGradient id="connectionGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="var(--medium-green)"/>
+            <stop offset="50%" stop-color="var(--bright-green)"/>
+            <stop offset="100%" stop-color="var(--medium-green)"/>
+        </linearGradient>
+
+        <!-- Data flow animation -->
+        <marker id="dataPacket" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+            <circle cx="5" cy="5" r="4" fill="var(--bright-green)"/>
+        </marker>
+
+        <!-- Animation definitions -->
+        <animate id="flowAnimation" begin="0s" dur="3s" repeatCount="indefinite"/>
+    </defs>
+
+    <!-- Server side -->
+    <g id="server" transform="translate(250, 280)">
+        <!-- Server tower -->
+        <rect x="0" y="0" width="150" height="220" rx="10" fill="url(#serverGradient)"/>
+        <!-- Server details - vent lines -->
+        <rect x="15" y="20" width="120" height="10" rx="2" fill="var(--white)"/>
+        <rect x="15" y="40" width="120" height="10" rx="2" fill="var(--white)"/>
+        <rect x="15" y="60" width="120" height="10" rx="2" fill="var(--white)"/>
+        <rect x="15" y="80" width="120" height="10" rx="2" fill="var(--white)"/>
+
+        <!-- Server lights -->
+        <circle cx="25" cy="120" r="5" fill="var(--bright-green)" opacity="0.8">
+            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="2s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="25" cy="140" r="5" fill="var(--yellow)" opacity="0.8">
+            <animate attributeName="opacity" values="0.8;0.3;0.8" dur="3s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Database cylinders -->
+        <g id="database">
+            <ellipse cx="75" cy="170" rx="40" ry="15" fill="var(--bright-green)" opacity="0.7"/>
+            <rect x="35" y="170" width="80" height="25" fill="var(--bright-green)" opacity="0.7"/>
+            <ellipse cx="75" cy="195" rx="40" ry="15" fill="var(--bright-green)" opacity="0.7"/>
+
+            <!-- Database details -->
+            <path d="M55,175 h40 M55,185 h40" stroke="var(--white)" stroke-width="2" opacity="0.6" stroke-linecap="round"/>
+        </g>
+    </g>
+
+    <!-- Browser side -->
+    <g id="browser" transform="translate(700, 310)">
+        <!-- Browser window -->
+        <rect x="0" y="0" width="200" height="160" rx="10" fill="url(#browserGradient)"/>
+        <!-- Browser header -->
+        <rect x="10" y="10" width="180" height="20" rx="3" fill="var(--dark-green)"/>
+        <!-- Browser content area -->
+        <rect x="10" y="40" width="180" height="110" rx="3" fill="var(--white)"/>
+
+        <!-- Browser controls -->
+        <circle cx="25" cy="20" r="5" fill="var(--red)"/>
+        <circle cx="40" cy="20" r="5" fill="var(--yellow)"/>
+        <circle cx="55" cy="20" r="5" fill="var(--bright-green)"/>
+
+        <!-- Browser content mock -->
+        <rect x="25" y="55" width="150" height="10" rx="2" fill="var(--light-blue)"/>
+        <rect x="25" y="75" width="120" height="10" rx="2" fill="var(--light-blue)"/>
+        <rect x="25" y="95" width="150" height="10" rx="2" fill="var(--light-blue)"/>
+        <rect x="25" y="115" width="90" height="10" rx="2" fill="var(--light-blue)"/>
+    </g>
+
+    <g id="hub-group" transform="translate(0, 50)">
+        <!-- Central connecting hub -->
+        <g id="hub" transform="translate(564, 340)">
+            <circle cx="0" cy="0" r="60" fill="url(#hubGradient)"/>
+
+            <!-- Sync symbol in hub -->
+            <path d="M0,-30 C16.56,-30 30,-16.56 30,0 C30,16.56 16.56,30 0,30 C-16.56,30 -30,16.56 -30,0 C-30,-16.56 -16.56,-30 0,-30 Z" fill="none" stroke="var(--white)" stroke-width="4"/>
+            <path d="M0,-15 L0,15 M-15,0 L15,0" stroke="var(--white)" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <!-- Data flow connections -->
+        <g id="connections" transform="translate(0, 10)">
+            <!-- Server to Hub connection -->
+            <path id="server-to-hub" d="M400,330 C450,330 500,330 504,330" stroke="url(#connectionGradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="1,5">
+                <animate attributeName="stroke-dashoffset" from="0" to="30" dur="2s" repeatCount="indefinite"/>
+            </path>
+
+            <!-- Hub to Server connection -->
+            <path id="hub-to-server" d="M504,330 C450,330 500,330 400,330" stroke="url(#connectionGradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="1,5">
+                <animate attributeName="stroke-dashoffset" from="30" to="0" dur="2s" repeatCount="indefinite"/>
+            </path>
+
+            <!-- Hub to Browser connection -->
+            <path id="hub-to-browser" d="M624,330 C650,330 675,330 700,330" stroke="url(#connectionGradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="1,5">
+                <animate attributeName="stroke-dashoffset" from="0" to="30" dur="2s" repeatCount="indefinite"/>
+            </path>
+
+            <!-- Browser to Hub connection -->
+            <path id="browser-to-hub" d="M700,330 C675,330 650,330 624,330" stroke="url(#connectionGradient)" stroke-width="4" stroke-linecap="round" stroke-dasharray="1,5">
+                <animate attributeName="stroke-dashoffset" from="30" to="0" dur="2s" repeatCount="indefinite"/>
+            </path>
+
+            <!-- Connection points with glowing effect -->
+            <circle cx="400" cy="330" r="8" fill="var(--bright-green)">
+                <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="504" cy="330" r="8" fill="var(--bright-green)">
+                <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="624" cy="330" r="8" fill="var(--bright-green)">
+                <animate attributeName="r" values="8;10;8" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="700" cy="330" r="8" fill="var(--bright-green)">
+                <animate attributeName="r" values="8;10;8" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+        </g>
+
+        <!-- Data packets animated along the connections -->
+        <g id="data-packets" transform="translate(0, 10)">
+            <!-- Server to Hub connection -->
+            <circle cx="0" cy="0" r="6" fill="var(--gray)" opacity="0.85">
+                <animateMotion path="M400,330 C450,330 500,330 504,330" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Hub to Server connection -->
+            <circle cx="0" cy="0" r="6" fill="var(--gray)" opacity="0.85">
+                <animateMotion path="M504,330 C450,330 500,330 400,330" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Hub to Browser connection -->
+            <circle cx="0" cy="0" r="6" fill="var(--gray)" opacity="0.85">
+                <animateMotion path="M624,330 C650,330 675,330 700,330" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <!-- Browser to Hub connection -->
+            <circle cx="0" cy="0" r="6" fill="var(--gray)" opacity="0.85">
+                <animateMotion path="M700,330 C675,330 650,330 624,330" dur="3s" repeatCount="indefinite"/>
+            </circle>
+        </g>
+    </g>
+</svg>

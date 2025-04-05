@@ -1,0 +1,8 @@
+{
+  "label": "Function API",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Function-based worker thread APIs"
+  }
+}

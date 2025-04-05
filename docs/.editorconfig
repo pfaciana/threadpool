@@ -1,0 +1,6 @@
+# .editorconfig
+root = true
+
+[*.md]
+indent_style = space
+indent_size = 2 # adjust as needed

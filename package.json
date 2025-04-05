@@ -1,0 +1,80 @@
+{
+	"name": "@renderdev/threadpool",
+	"version": "0.1.0",
+	"description": "Quickly run CPU-intensive tasks in parallel across all JavaScript environments with a unified, type-safe API",
+	"license": "MIT",
+	"type": "module",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./node": {
+			"types": "./dist/node/index.d.ts",
+			"import": "./dist/node/index.js"
+		},
+		"./function": {
+			"types": "./dist/function/index.d.ts",
+			"import": "./dist/function/index.js"
+		},
+		"./web": {
+			"types": "./dist/web/index.d.ts",
+			"import": "./dist/web/index.js"
+		},
+		"./utils": {
+			"types": "./dist/utils/index.d.ts",
+			"import": "./dist/utils/index.js"
+		}
+	},
+	"files": [
+		"dist",
+		"!dist/fixtures",
+		"src",
+		"!src/fixtures",
+		"!**/*.test.ts",
+		"!tsconfig.ts",
+		"CHANGELOG.md",
+		"DEVELOPER_CHANGELOG.md",
+		"LICENSE",
+		"README.md"
+	],
+	"scripts": {
+		"test:all": "pnpm run test && pnpm run bun:test && pnpm run deno:test && pnpm run deno:web:test",
+		"test": "cross-env NODE_NO_WARNINGS=1 vitest run --config vitest.config.ts",
+		"test:dist": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 vitest run --config vitest.config.ts",
+		"test:watch": "cross-env NODE_NO_WARNINGS=1 vitest --config vitest.config.ts",
+		"test:dist:watch": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 vitest --config vitest.config.ts",
+		"test:coverage": "cross-env NODE_NO_WARNINGS=1 vitest run --config vitest.config.ts --coverage",
+		"test:dist:coverage": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 vitest run --config vitest.config.ts --coverage",
+		"bun:test": "cross-env NODE_NO_WARNINGS=1 RUNTIME=bun BUN=1 bun vitest run --config vitest.config.ts",
+		"bun:test:dist": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 RUNTIME=bun BUN=1 bun vitest run --config vitest.config.ts",
+		"bun:test:watch": "cross-env NODE_NO_WARNINGS=1 RUNTIME=bun BUN=1 bun vitest --config vitest.config.ts",
+		"bun:test:dist:watch": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 RUNTIME=bun BUN=1 bun vitest --config vitest.config.ts",
+		"deno:test": "cross-env NODE_NO_WARNINGS=1 RUNTIME=deno DENO=1 DENO_UNSTABLE_SLOPPY_IMPORTS=1 deno run -A npm:vitest run --config vitest.config.ts",
+		"deno:test:dist": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 RUNTIME=deno DENO=1 DENO_UNSTABLE_SLOPPY_IMPORTS=1 deno run -A npm:vitest run --config vitest.config.ts",
+		"deno:test:watch": "cross-env NODE_NO_WARNINGS=1 RUNTIME=deno DENO=1 DENO_UNSTABLE_SLOPPY_IMPORTS=1 deno run -A npm:vitest --config vitest.config.ts",
+		"deno:test:dist:watch": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 RUNTIME=deno DENO=1 DENO_UNSTABLE_SLOPPY_IMPORTS=1 deno run -A npm:vitest --config vitest.config.ts",
+		"deno:web:test": "cross-env NODE_NO_WARNINGS=1 RUNTIME=deno DENO=1 DENO_UNSTABLE_SLOPPY_IMPORTS=1 deno run -A npm:vitest run --config vitest.deno.config.ts",
+		"deno:web:test:dist": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 RUNTIME=deno DENO=1 DENO_UNSTABLE_SLOPPY_IMPORTS=1 deno run -A npm:vitest run --config vitest.deno.config.ts",
+		"deno:web:test:watch": "cross-env NODE_NO_WARNINGS=1 RUNTIME=deno DENO=1 DENO_UNSTABLE_SLOPPY_IMPORTS=1 deno run -A npm:vitest --config vitest.deno.config.ts",
+		"deno:web:test:dist:watch": "cross-env VITEST_ALIAS_DIR=dist NODE_NO_WARNINGS=1 RUNTIME=deno DENO=1 DENO_UNSTABLE_SLOPPY_IMPORTS=1 deno run -A npm:vitest --config vitest.deno.config.ts",
+		"build:examples": "rollup -c examples/web/rollup.config.js",
+		"build:examples:watch": "rollup -c examples/web/rollup.config.js --watch",
+		"build": "rm -rf dist && rollup -c"
+	},
+	"devDependencies": {
+		"@rollup/plugin-alias": "^5.1.1",
+		"@rollup/plugin-node-resolve": "^16.0.0",
+		"@rollup/plugin-typescript": "^12.1.2",
+		"@types/node": "*",
+		"@vitest/coverage-v8": "^3",
+		"cross-env": "^7",
+		"rollup": "^4.35.0",
+		"rollup-plugin-swc3": "^0.12",
+		"tslib": "^2.8.1",
+		"vitest": "^3"
+	},
+	"dependencies": {
+		"system-resource-monitor": "^2.1.0"
+	}
+}

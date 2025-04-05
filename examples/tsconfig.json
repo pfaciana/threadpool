@@ -1,0 +1,24 @@
+{
+	"extends": "./../tsconfig.json",
+	"compilerOptions": {
+		// Language and Environment
+		"target": "ESNext",
+		
+		// Modules
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"allowImportingTsExtensions": true,
+		"rootDir": "./..",
+		
+		// Emit
+		"noEmit": true
+	},
+	"include": [
+		"**/*.ts",
+		"**/*.cts",
+		"**/*.mts"
+	],
+	"exclude": [
+		"web/*"
+	]
+}

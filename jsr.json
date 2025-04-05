@@ -1,0 +1,25 @@
+{
+	"name": "@renderdev/threadpool",
+	"version": "0.1.0",
+	"license": "MIT",
+	"exports": {
+		".": "./src/index.ts",
+		"./node": "./src/node/index.ts",
+		"./function": "./src/function/index.ts",
+		"./web": "./src/web/index.ts",
+		"./utils": "./src/utils/index.ts"
+	},
+	"publish": {
+		"include": [
+			"src/**/*.ts",
+			"CHANGELOG.md",
+			"DEVELOPER_CHANGELOG.md",
+			"LICENSE",
+			"README.md"
+		],
+		"exclude": [
+			"**/*.test.ts",
+			"src/fixtures"
+		]
+	}
+}

@@ -1,0 +1,92 @@
+{
+	"compilerOptions": {
+		// Type Checking
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"alwaysStrict": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitAny": false,
+		"noImplicitOverride": true,
+		"noImplicitReturns": false,
+		"noImplicitThis": true,
+		"noUncheckedIndexedAccess": false,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strict": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"useUnknownInCatchVariables": true,
+		
+		// Modules
+		"allowImportingTsExtensions": true,
+		"baseUrl": ".",
+		"module": "NodeNext",
+		"moduleResolution": "NodeNext",
+		"paths": {
+			"@/*": [
+				"src/*"
+			]
+		},
+		"resolveJsonModule": true,
+		"rootDir": "./src",
+		"typeRoots": [
+			"./node_modules/@types"
+		],
+		"types": [
+			"node"
+		],
+		
+		// Emit
+		"declaration": true,
+		"declarationMap": true,
+		"importHelpers": false,
+		"noEmit": false,
+		"newLine": "lf",
+		"outDir": "./dist",
+		"removeComments": false,
+		
+		// JavaScript Support
+		"allowJs": true,
+		"checkJs": true,
+		
+		// Interop Constraints
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+		
+		// Language and Environment
+		"lib": [
+			"ESNext",
+			"DOM",
+			"DOM.Iterable",
+			"WebWorker"
+		],
+		"target": "ESNext",
+		"useDefineForClassFields": true,
+		
+		// Output Formatting
+		"noErrorTruncation": false,
+		
+		// Completeness
+		"skipLibCheck": true
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.cts",
+		"src/**/*.mts"
+	],
+	"exclude": [
+		"**/*.test.cts",
+		"**/*.test.mts",
+		"**/*.test.ts",
+		"src/fixtures/*",
+		"dist",
+		"docs",
+		"examples",
+		"node_modules"
+	]
+}

@@ -1,0 +1,43 @@
+.featureSection {
+	background:       var(--ifm-background-surface-color);
+	position:         relative;
+	display:          flex;
+	align-items:      center;
+	padding:          4rem 0;
+	width:            100%;
+}
+
+.featureSection::before {
+	content:    '';
+	position:   absolute;
+	top:        0;
+	left:       0;
+	width:      100%;
+	height:     6px;
+	background: linear-gradient(90deg, var(--ifm-color-primary-darker) 0%, var(--ifm-color-primary) 100%);
+}
+
+.featureSubtitle {
+	font-size: 1.2rem;
+	max-width: 600px;
+	margin:    0 auto 1rem;
+	opacity:   0.8;
+}
+
+.featureSvg {
+	height:        180px;
+	width:         180px;
+	margin-bottom: 1rem;
+	fill:          var(--ifm-font-color-base);
+}
+
+@media screen and (max-width: 996px) {
+	.featureSection {
+		padding: 3rem 0;
+	}
+
+	.featureSvg {
+		height: 140px;
+		width:  140px;
+	}
+}

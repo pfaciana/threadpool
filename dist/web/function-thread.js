@@ -1,0 +1,246 @@
+import { ThreadStatus, Status } from '../thread-status.js';
+
+/**
+ * Manages a function-based thread in web environments.
+ *
+ * WebFunctionThread wraps an asynchronous function with thread-like status
+ * tracking and eventing capabilities, allowing it to be managed similar to
+ * actual web workers but without the overhead of creating separate worker threads.
+ *
+ * @class
+ * @extends {EventTarget}
+ *
+ * @example
+ * ```ts
+ * // Create a thread to perform a calculation
+ * const thread = new WebFunctionThread({
+ *   workerFn: async () => {
+ *     // Simulate complex work
+ *     await new Promise(resolve => setTimeout(resolve, 500));
+ *     return 42;
+ *   },
+ *   meta: { id: "calculation-1" }
+ * });
+ *
+ * // Listen for events
+ * thread.addEventListener('message', (event) => {
+ *   console.log('Result:', event.detail);
+ * });
+ *
+ * // Start the thread
+ * thread.start();
+ *
+ * // Or use Promise-like API
+ * thread.then(result => {
+ *   console.log('Got result:', result);
+ * }).catch((error, type) => {
+ *   console.error(`Error (${type}):`, error);
+ * }).finally(() => {
+ *   console.log('Thread completed');
+ * });
+ * ```
+ */
+class WebFunctionThread extends EventTarget {
+    #status = new ThreadStatus();
+    #workerFn;
+    /**
+     * Optional metadata associated with this thread
+     * @type {any|undefined}
+     */
+    meta;
+    #message;
+    #error;
+    /**
+     * Gets the current thread status.
+     *
+     * @type {ThreadStatus}
+     */
+    get status() {
+        return this.#status;
+    }
+    /**
+     * Gets the latest message received from the thread.
+     *
+     * @type {any}
+     */
+    get message() {
+        return this.#message;
+    }
+    /**
+     * Gets any error that occurred in the thread.
+     *
+     * @type {any}
+     */
+    get error() {
+        return this.#error;
+    }
+    /**
+     * Creates a new WebFunctionThread.
+     *
+     * @param {WebFunctionThreadOptions} options - Configuration options containing the worker
+     *   function to execute and optional metadata
+     */
+    constructor({ workerFn, meta }) {
+        super();
+        this.#workerFn = workerFn;
+        this.meta = meta;
+        this.#setStatus(Status.READY, meta);
+    }
+    /**
+     * Updates the thread status and dispatches a status event.
+     *
+     * @private
+     * @param {number} newState - The new status to set
+     * @param {...any} args - Additional arguments to include with the status event
+     */
+    #setStatus(newState, ...args) {
+        const oldState = this.#status.value;
+        this.#status.value = newState;
+        this.dispatchEvent(new CustomEvent('status', {
+            detail: [this.#status, newState, oldState, ...args],
+        }));
+    }
+    /**
+     * Starts execution of the thread function.
+     *
+     * Once started, the thread cannot be started again.
+     * Events dispatched during execution:
+     * - 'init' - When the thread starts
+     * - 'message' - When the thread completes successfully
+     * - 'error' - When the thread throws an error directly
+     * - 'messageerror' - When the thread's promise rejects
+     * - 'exit' - When the thread completes (either success or error)
+     * - 'status' - When the thread status changes
+     *
+     * @returns {boolean} True if the thread was started, false if it was already running
+     *
+     * @example
+     * ```ts
+     * const thread = new WebFunctionThread({
+     *   workerFn: async () => {
+     *     return await fetchData();
+     *   }
+     * });
+     *
+     * thread.addEventListener('message', (event) => {
+     *   const data = event.detail;
+     *   // Process the fetched data
+     * });
+     *
+     * thread.start();
+     * ```
+     */
+    start() {
+        if (!this.status.READY) {
+            return false;
+        }
+        this.#setStatus(Status.ACTIVE);
+        this.dispatchEvent(new CustomEvent('init', { detail: this }));
+        this.#workerFn()
+            .then(message => {
+            this.#message = message;
+            this.#setStatus(Status.SUCCESS, message);
+            this.dispatchEvent(new CustomEvent('message', { detail: message }));
+        }, reason => {
+            this.#error = reason;
+            this.#setStatus(Status.ERROR, reason);
+            this.dispatchEvent(new CustomEvent('error', { detail: reason }));
+        })
+            .catch(error => {
+            this.#error = error;
+            this.#setStatus(Status.ERROR, error);
+            this.dispatchEvent(new CustomEvent('messageerror', { detail: error }));
+        })
+            .finally(() => {
+            this.dispatchEvent(new CustomEvent('exit', {
+                detail: this.#status.SUCCESS ? 0 : 1,
+            }));
+        });
+        return true;
+    }
+    /**
+     * Adds a callback to handle successful completion of the thread.
+     *
+     * @param {Function} onFulfilled - Function called with the result when thread completes successfully
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * const thread = new WebFunctionThread({
+     *   workerFn: async () => {
+     *     return 42;
+     *   }
+     * });
+     *
+     * thread.then(result => {
+     *   console.log(`The answer is: ${result}`);
+     * });
+     *
+     * thread.start();
+     * ```
+     */
+    then(onFulfilled) {
+        this.addEventListener('message', ((event) => {
+            onFulfilled(event.detail);
+        }));
+        return this;
+    }
+    /**
+     * Adds a callback to handle errors from the thread.
+     *
+     * @param {Function} onRejected - Function called when the thread encounters an error
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * const thread = new WebFunctionThread({
+     *   workerFn: async () => {
+     *     throw new Error("Something went wrong");
+     *   }
+     * });
+     *
+     * thread.catch((error, type) => {
+     *   console.error(`Error type: ${type}`);
+     *   console.error(error);
+     * });
+     *
+     * thread.start();
+     * ```
+     */
+    catch(onRejected) {
+        this.addEventListener('error', ((event) => {
+            onRejected(event.detail, 'error');
+        }));
+        this.addEventListener('messageerror', ((event) => {
+            onRejected(event.detail, 'messageerror');
+        }));
+        return this;
+    }
+    /**
+     * Adds a callback that will be called when the thread exits, regardless of success or failure.
+     *
+     * @param {Function} onFinally - Function called when the thread exits
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * const thread = new WebFunctionThread({
+     *   workerFn: async () => {
+     *     // Some work
+     *   }
+     * });
+     *
+     * thread.finally(() => {
+     *   console.log('Thread finished, clean up resources');
+     * });
+     *
+     * thread.start();
+     * ```
+     */
+    finally(onFinally) {
+        this.addEventListener('exit', (() => onFinally()));
+        return this;
+    }
+}
+
+export { WebFunctionThread };

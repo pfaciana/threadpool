@@ -1,0 +1,102 @@
+# IDE & Editor Files
+.archive/
+.idea/
+.obsidian/
+.vscode/
+.vscode-test/
+.editorconfig
+.DS_Store
+Thumbs.db
+*~
+*.swp
+*.swo
+
+# Build & Development
+coverage/
+docs/
+.nyc_output/
+lib-cov/
+*.lcov
+.cache/
+.temp/
+.parcel-cache/
+.serverless/
+
+# Dependencies
+node_modules/
+.pnp.*
+.yarn/
+.npm/
+.npmrc
+.yarnrc
+.nvmrc
+
+# Configuration Files
+.git/
+.github/
+.gitlab/
+.circleci/
+.jenkins/
+.travis.yml
+docker/
+docker-compose.yml
+Dockerfile
+jest.config.js
+vitest.config.js
+vitest.config.ts
+vitest.setup.ts
+test.config.js
+
+# TypeScript
+typings/
+*.tsbuildinfo
+
+# Logs & Debug
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime & Process
+pids/
+*.pid
+*.seed
+*.pid.lock
+.lock-wscript
+.node_repl_history
+.tern-port
+
+# Environment & Secrets
+.env*
+.local
+.secrets
+.vars
+.zipignore
+*.pem
+*.key
+config/secrets.*
+.keys
+
+# Testing
+__tests__/
+__mocks__/
+spec/
+test/
+tests/
+tests/_data/cache/
+
+# Local Databases
+*.sql
+*.sqlite
+
+# Version Control
+.gitattributes
+.gitignore
+
+# Project Specific
+blueprint.json
+Makefile

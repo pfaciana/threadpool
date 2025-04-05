@@ -1,0 +1,310 @@
+import { EventEmitter } from 'node:events';
+import { FunctionThread } from './function-thread.js';
+import { TaskPool } from './../pool-status.js';
+/**
+ * Information about the system's hardware resources.
+ *
+ * @typedef {Object} SystemInfo
+ * @property {number} cores - Number of physical CPU cores
+ * @property {number} threads - Number of logical CPU threads
+ * @property {number} memory - Total system memory in bytes
+ */
+type SystemInfo = {
+    cores: number;
+    threads: number;
+    memory: number;
+};
+/**
+ * Options for configuring a FunctionPool instance.
+ *
+ * @property {number} [pingInterval] - Interval in ms between task scheduling attempts
+ * @property {number} [poolSize] - Maximum number of concurrent threads
+ * @property {number} [maxThreadThreshold] - Maximum CPU usage threshold for scheduling threads
+ */
+export type FunctionPoolOptions = {
+    pingInterval?: number;
+    poolSize?: number;
+    maxThreadThreshold?: number;
+    [key: string]: any;
+};
+/**
+ * Manages a pool of FunctionThread instances for parallel execution.
+ *
+ * FunctionPool provides a high-level API for managing multiple function-based
+ * threads in Node.js, automatically handling queuing, execution, and resource monitoring.
+ * It offers Promise-like APIs and combinators (then, catch, all, race, etc.)
+ * for working with multiple concurrent tasks.
+ *
+ * @class
+ * @extends {EventEmitter}
+ *
+ * @example
+ * ```ts
+ * // Create a pool with default settings
+ * const pool = new FunctionPool();
+ *
+ * // Add several computational tasks
+ * pool.addTask(async () => {
+ *   // Task 1: Calculate something complex
+ *   return await complexCalculation(500000);
+ * });
+ *
+ * pool.addTask(async () => {
+ *   // Task 2: Process some data
+ *   return await processData(largeDataset);
+ * });
+ *
+ * // Wait for all tasks to complete
+ * pool.allSettled(threads => {
+ *   console.log(`All ${threads.length} tasks completed`);
+ *   threads.forEach(thread => {
+ *     console.log(`Thread result: ${thread.message}`);
+ *   });
+ * });
+ *
+ * // Or handle results as they complete
+ * pool.then((data, thread) => {
+ *   console.log(`Thread completed with result:`, data);
+ * });
+ * ```
+ */
+export declare class FunctionPool extends EventEmitter {
+    #private;
+    /**
+     * Maximum CPU usage threshold (percentage) for scheduling threads.
+     * When CPU usage is above this threshold, no new threads will be scheduled.
+     *
+     * @type {number}
+     */
+    maxThreadThreshold: number;
+    /**
+     * Creates a new FunctionPool.
+     *
+     * @param {Object} [options={}] - Pool configuration options
+     * @param {number} [options.pingInterval] - Interval in ms between task scheduling attempts
+     * @param {number} [options.poolSize] - Maximum number of concurrent threads
+     * @param {number} [options.maxThreadThreshold] - Maximum CPU usage threshold for scheduling threads
+     *
+     * @example
+     * ```ts
+     * // Create a pool with custom settings
+     * const pool = new FunctionPool({
+     *   poolSize: 4,              // Run at most 4 tasks concurrently
+     *   pingInterval: 200,        // Check for available tasks every 200ms
+     *   maxThreadThreshold: 85    // Don't start new tasks if CPU usage is above 85%
+     * });
+     * ```
+     */
+    constructor(options?: FunctionPoolOptions);
+    /**
+     * Gets information about the system's hardware resources.
+     *
+     * @type {SystemInfo}
+     *
+     * @example
+     * ```ts
+     * const pool = new FunctionPool();
+     * console.log(`Running on a system with ${pool.system.cores} physical cores`);
+     * console.log(`${pool.system.threads} logical threads available`);
+     * console.log(`${Math.round(pool.system.memory / 1024 / 1024)} MB RAM`);
+     * ```
+     */
+    get system(): SystemInfo;
+    /**
+     * Sets the interval in milliseconds between task scheduling attempts.
+     *
+     * @param {number} value - Ping interval in milliseconds (minimum: 1)
+     */
+    set pingInterval(value: number);
+    /**
+     * Sets the maximum number of threads that can run concurrently.
+     *
+     * @param {number} value - Pool size (minimum: 1)
+     */
+    set poolSize(value: number);
+    /**
+     * Gets the maximum number of threads that can run concurrently.
+     *
+     * @returns {number} Current maximum pool size
+     */
+    get poolSize(): number;
+    /**
+     * Gets status information about the thread pool.
+     * See TaskPool.status() for detailed documentation on parameters and return types.
+     *
+     * @type {typeof TaskPool.prototype.status}
+     */
+    status: typeof TaskPool.prototype.status;
+    /**
+     * Checks if all threads in the pool have completed.
+     *
+     * @type {typeof TaskPool.prototype.isCompleted}
+     * @returns {boolean} True if all tasks are completed
+     */
+    isCompleted: typeof TaskPool.prototype.isCompleted;
+    /**
+     * Checks if the pool has capacity for another active thread,
+     * taking into account both pool size and system CPU usage.
+     *
+     * @returns {boolean} True if another thread can be started
+     */
+    hasAvailableThread(): boolean;
+    /**
+     * Adds a task (function) to the pool for execution.
+     *
+     * @param {Function} workerFn - Async function to execute
+     * @param {any} [meta] - Optional metadata to associate with the thread
+     * @returns {FunctionThread} The created thread instance
+     *
+     * @example
+     * ```ts
+     * // Add a task to process data
+     * const thread = pool.addTask(async () => {
+     *   const data = await readFile('large-data.json');
+     *   return processData(JSON.parse(data));
+     * }, { id: 'data-processing-task' });
+     *
+     * // You can also work with the thread directly
+     * thread.on('message', result => {
+     *   console.log('Task completed with result:', result);
+     * });
+     * ```
+     */
+    addTask(workerFn: () => Promise<any>, meta?: any | undefined): FunctionThread;
+    /**
+     * Adds a callback for successful thread completions.
+     * The callback will be called each time any thread completes successfully.
+     *
+     * @param {Function} onFulfilled - Callback for successful thread completion
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * pool.then((data, thread) => {
+     *   console.log(`Thread ${thread.meta.id} succeeded with:`, data);
+     * });
+     * ```
+     */
+    then(onFulfilled: (value: any, thread: FunctionThread) => void): this;
+    /**
+     * Adds a callback for thread errors.
+     * The callback will be called each time any thread encounters an error.
+     *
+     * @param {Function} onRejected - Callback for thread errors
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * pool.catch((error, type, thread) => {
+     *   console.error(`Thread ${thread.meta.id} failed:`, error);
+     *   console.error(`Error type: ${type}`);
+     * });
+     * ```
+     */
+    catch(onRejected: (error: any, type: 'error' | 'messageerror', thread: FunctionThread) => void): this;
+    /**
+     * Adds a callback for thread completions, regardless of success or failure.
+     * The callback will be called each time any thread completes.
+     *
+     * @param {Function} onFinally - Callback for thread completion
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * pool.finally((exitCode, thread) => {
+     *   console.log(`Thread ${thread.meta.id} completed with exit code: ${exitCode}`);
+     * });
+     * ```
+     */
+    finally(onFinally: (exitCode: any, thread: FunctionThread) => void): this;
+    /**
+     * Registers a callback that will be invoked when all threads have completed,
+     * regardless of success or failure.
+     *
+     * @param {Function} callback - Function called with array of all completed threads
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * pool.allSettled(threads => {
+     *   console.log(`All ${threads.length} tasks completed`);
+     *
+     *   // Count successful and failed threads
+     *   const successful = threads.filter(t => t.status.SUCCESS).length;
+     *   const failed = threads.filter(t => t.status.ERROR).length;
+     *
+     *   console.log(`${successful} succeeded, ${failed} failed`);
+     * });
+     * ```
+     */
+    allSettled(callback: (threads: FunctionThread[]) => void): this;
+    /**
+     * Registers a callback that will be invoked when either:
+     * 1. All threads have completed successfully, or
+     * 2. Any thread fails
+     *
+     * @param {Function} callback - Function called with array of threads or error
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * pool.all(result => {
+     *   if (result instanceof Error) {
+     *     console.error('At least one task failed:', result);
+     *   } else {
+     *     console.log(`All ${result.length} tasks succeeded`);
+     *     result.forEach(thread => {
+     *       console.log(`Task result:`, thread.message);
+     *     });
+     *   }
+     * });
+     * ```
+     */
+    all(callback: (threads: FunctionThread[] | Error) => void): this;
+    /**
+     * Registers a callback that will be invoked when either:
+     * 1. The first thread completes successfully, or
+     * 2. All threads have failed
+     *
+     * @param {Function} callback - Function called with result or AggregateError
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * pool.any((result, thread) => {
+     *   if (result instanceof AggregateError) {
+     *     console.error('All tasks failed:', result);
+     *   } else {
+     *     console.log(`Task succeeded with result:`, result);
+     *     console.log(`Completed thread:`, thread);
+     *   }
+     * });
+     * ```
+     */
+    any(callback: (data: any | AggregateError, thread: FunctionThread | undefined) => void): this;
+    /**
+     * Registers a callback that will be invoked when any thread completes or fails.
+     * The callback receives the result or error from the first thread to settle.
+     *
+     * @param {Function} callback - Function called with result and thread
+     * @returns {this} This instance for chaining
+     *
+     * @example
+     * ```ts
+     * pool.race((result, thread) => {
+     *   console.log(`First thread to complete:`, thread);
+     *   console.log(`Result:`, result);
+     *
+     *   // Check if it was successful
+     *   if (thread.status.SUCCESS) {
+     *     console.log('Thread succeeded');
+     *   } else {
+     *     console.log('Thread failed');
+     *   }
+     * });
+     * ```
+     */
+    race(callback: (data: any, thread: FunctionThread) => void): this;
+}
+export {};
+//# sourceMappingURL=function-pool.d.ts.map

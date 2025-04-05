@@ -1,0 +1,202 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="300 300 500 220" preserveAspectRatio="xMidYMid meet">
+    <title>Promise-Based API</title>
+    <defs>
+        <!-- Color Palette -->
+        <style>
+            :root {
+            --gray: #888;
+            --dark-blue: #3f3d56;
+            --dark-green: #2e8555;
+            --medium-green: #3ecc5f;
+            --bright-green: #44d860;
+            --white: #fff;
+            --light-gray: #f2f2f2;
+            --yellow: #ffde69;
+            --red: #ff6b6b;
+            --light-blue: #e0e0ff;
+            }
+        </style>
+    </defs>
+
+    <!-- Main task initiator block -->
+    <g id="main-task">
+        <rect x="320" y="320" width="60" height="40" rx="3" fill="var(--white)"/>
+        <rect x="330" y="330" width="40" height="20" fill="var(--dark-blue)" rx="2"/>
+    </g>
+
+    <!-- Promise Chain Row 1 -->
+    <g id="promise-row-1">
+        <!-- First promise block - Pending then Resolved -->
+        <g id="promise-1">
+            <rect x="420" y="320" width="60" height="40" rx="3" fill="var(--yellow)">
+            </rect>
+        </g>
+
+        <!-- Second promise block - Pending then Rejected -->
+        <g id="promise-2">
+            <rect x="520" y="320" width="60" height="40" rx="3" fill="var(--yellow)">
+            </rect>
+        </g>
+
+        <!-- Third promise block - Pending then Resolved -->
+        <g id="promise-3">
+            <rect x="620" y="320" width="60" height="40" rx="3" fill="var(--yellow)">
+            </rect>
+        </g>
+
+        <!-- Fourth promise block - Pending then Resolved -->
+        <g id="promise-4">
+            <rect x="720" y="320" width="60" height="40" rx="3" fill="var(--yellow)">
+            </rect>
+        </g>
+    </g>
+
+    <!-- Promise Chain Row 2 - Chain Results -->
+    <g id="promise-row-2">
+        <!-- Then block 1 -->
+        <g id="then-1">
+            <rect x="420" y="400" width="60" height="40" rx="3" fill="var(--medium-green)" opacity="0.3">
+                <animate attributeName="opacity" values="0.3;1" dur="0.5s" begin="1.8s" fill="freeze"/>
+            </rect>
+        </g>
+
+        <!-- Catch block -->
+        <g id="catch-block">
+            <rect x="520" y="400" width="60" height="40" rx="3" fill="var(--red)" opacity="0.3">
+                <animate attributeName="opacity" values="0.3;1" dur="0.5s" begin="4.8s" fill="freeze"/>
+            </rect>
+        </g>
+
+        <!-- Then block 2 -->
+        <g id="then-2">
+            <rect x="620" y="400" width="60" height="40" rx="3" fill="var(--medium-green)" opacity="0.3">
+                <animate attributeName="opacity" values="0.3;1" dur="0.5s" begin="3.2s" fill="freeze"/>
+            </rect>
+        </g>
+
+        <!-- Then block 3 -->
+        <g id="then-3">
+            <rect x="720" y="400" width="60" height="40" rx="3" fill="var(--medium-green)" opacity="0.3">
+                <animate attributeName="opacity" values="0.3;1" dur="0.5s" begin="4.2s" fill="freeze"/>
+            </rect>
+        </g>
+    </g>
+
+    <!-- Connection lines -->
+    <g id="connection-lines">
+        <!-- Main task to first promise -->
+        <path d="M380,340 L420,340" stroke="var(--medium-green)" stroke-width="3" stroke-dasharray="1,0" fill="none"/>
+
+        <!-- Promise to Promise horizontal connections -->
+        <path d="M480,340 L520,340" stroke="var(--medium-green)" stroke-width="3" stroke-dasharray="1,0" fill="none"/>
+        <path d="M580,340 L620,340" stroke="var(--medium-green)" stroke-width="3" stroke-dasharray="1,0" fill="none"/>
+        <path d="M680,340 L720,340" stroke="var(--medium-green)" stroke-width="3" stroke-dasharray="1,0" fill="none"/>
+
+        <!-- Vertical connections - Promise to then/catch -->
+        <path d="M450,360 L450,400" stroke="var(--medium-green)" stroke-width="3" stroke-dasharray="1,0" fill="none">
+            <animate attributeName="opacity" values="0;1" dur="0.3s" begin="1.6s" fill="freeze"/>
+        </path>
+        <path d="M550,360 L550,400" stroke="var(--red)" stroke-width="3" stroke-dasharray="1,0" fill="none">
+            <animate attributeName="opacity" values="0;1" dur="0.3s" begin="4.6s" fill="freeze"/>
+        </path>
+        <path d="M650,360 L650,400" stroke="var(--medium-green)" stroke-width="3" stroke-dasharray="1,0" fill="none">
+            <animate attributeName="opacity" values="0;1" dur="0.3s" begin="3.0s" fill="freeze"/>
+        </path>
+        <path d="M750,360 L750,400" stroke="var(--medium-green)" stroke-width="3" stroke-dasharray="1,0" fill="none">
+            <animate attributeName="opacity" values="0;1" dur="0.3s" begin="4.0s" fill="freeze"/>
+        </path>
+    </g>
+
+    <!-- Data flow indicators -->
+    <g id="data-flow">
+        <!-- Main to first promise -->
+        <rect x="380" y="335" width="10" height="10" rx="2" fill="var(--dark-blue)">
+            <animateMotion path="M0,0 L40,0" dur="0.8s" begin="0.2s" repeatCount="1" fill="freeze"/>
+        </rect>
+
+        <!-- First promise to second -->
+        <rect x="480" y="335" width="10" height="10" rx="2" fill="var(--dark-blue)">
+            <animateMotion path="M0,0 L40,0" dur="0.8s" begin="1.6s" repeatCount="1" fill="freeze"/>
+        </rect>
+
+        <!-- Second promise to third -->
+        <rect x="580" y="335" width="10" height="10" rx="2" fill="var(--dark-blue)">
+            <animateMotion path="M0,0 L40,0" dur="0.8s" begin="2.2s" repeatCount="1" fill="freeze"/>
+        </rect>
+
+        <!-- Third promise to fourth -->
+        <rect x="680" y="335" width="10" height="10" rx="2" fill="var(--dark-blue)">
+            <animateMotion path="M0,0 L40,0" dur="0.8s" begin="3.0s" repeatCount="1" fill="freeze"/>
+        </rect>
+
+        <!-- Vertical data flows -->
+        <rect x="445" y="360" width="10" height="10" rx="2" fill="var(--dark-blue)">
+            <animateMotion path="M0,0 L0,40" dur="0.6s" begin="1.7s" repeatCount="1" fill="freeze"/>
+        </rect>
+
+        <rect x="545" y="360" width="10" height="10" rx="2" fill="var(--dark-blue)">
+            <animateMotion path="M0,0 L0,40" dur="0.6s" begin="4.6s" repeatCount="1" fill="freeze"/>
+        </rect>
+
+        <rect x="645" y="360" width="10" height="10" rx="2" fill="var(--dark-blue)">
+            <animateMotion path="M0,0 L0,40" dur="0.6s" begin="3.1s" repeatCount="1" fill="freeze"/>
+        </rect>
+
+        <rect x="745" y="360" width="10" height="10" rx="2" fill="var(--dark-blue)">
+            <animateMotion path="M0,0 L0,40" dur="0.6s" begin="4.1s" repeatCount="1" fill="freeze"/>
+        </rect>
+    </g>
+
+    <!-- Final collection/result -->
+    <g id="final-result">
+        <g id="end-task">
+            <rect x="570" y="460" width="60" height="40" rx="3" fill="var(--white)"/>
+            <rect x="580" y="470" width="40" height="20" fill="var(--dark-blue)" rx="2"/>
+        </g>
+
+        <!-- Connection lines to final result with proper initial opacity 0 -->
+        <path d="M450,440 L450,480 L570,480" stroke="var(--gray)" stroke-width="3" fill="none" stroke-dasharray="5,3" opacity="0.1">
+            <animate attributeName="opacity" values="0;1" dur="0.3s" begin="5.2s" fill="freeze"/>
+            <animate attributeName="stroke-dashoffset" from="100" to="0" dur="0.6s" begin="5.2s" fill="freeze"/>
+        </path>
+
+        <path d="M550,440 L550,480 L570,480" stroke="var(--gray)" stroke-width="3" fill="none" stroke-dasharray="5,3" opacity="0.1">
+            <animate attributeName="opacity" values="0;1" dur="0.3s" begin="5.2s" fill="freeze"/>
+            <animate attributeName="stroke-dashoffset" from="100" to="0" dur="0.6s" begin="5.2s" fill="freeze"/>
+        </path>
+
+        <path d="M650,440 L650,480 L630,480" stroke="var(--gray)" stroke-width="3" fill="none" stroke-dasharray="5,3" opacity="0.1">
+            <animate attributeName="opacity" values="0;1" dur="0.3s" begin="5.2s" fill="freeze"/>
+            <animate attributeName="stroke-dashoffset" from="100" to="0" dur="0.6s" begin="5.2s" fill="freeze"/>
+        </path>
+
+        <path d="M750,440 L750,480 L630,480" stroke="var(--gray)" stroke-width="3" fill="none" stroke-dasharray="5,3" opacity="0.1">
+            <animate attributeName="opacity" values="0;1" dur="0.3s" begin="5.2s" fill="freeze"/>
+            <animate attributeName="stroke-dashoffset" from="100" to="0" dur="0.6s" begin="5.2s" fill="freeze"/>
+        </path>
+
+        <!-- Moving data indicators for final connections - Corrected y positions -->
+        <rect x="445" y="430" width="10" height="10" rx="2" fill="var(--gray)" opacity="0.1">
+            <animate attributeName="opacity" values="1" dur="0.1s" begin="5.5s" fill="freeze"/>
+            <animateMotion path="M0,0 L0,45 L120,45" dur="0.8s" begin="5.5s" fill="freeze"/>
+        </rect>
+
+        <rect x="545" y="430" width="10" height="10" rx="2" fill="var(--gray)" opacity="0.1">
+            <animate attributeName="opacity" values="1" dur="0.1s" begin="5.5s" fill="freeze"/>
+            <animateMotion path="M0,0 L0,45 L20,45" dur="0.8s" begin="5.5s" fill="freeze"/>
+        </rect>
+
+        <rect x="645" y="430" width="10" height="10" rx="2" fill="var(--gray)" opacity="0.1">
+            <animate attributeName="opacity" values="1" dur="0.1s" begin="5.5s" fill="freeze"/>
+            <animateMotion path="M0,0 L0,45 L-20,45" dur="0.8s" begin="5.5s" fill="freeze"/>
+        </rect>
+
+       <rect x="745" y="430" width="10" height="10" rx="2" fill="var(--gray)" opacity="0.1">
+            <animate attributeName="opacity" values="1" dur="0.1s" begin="5.5s" fill="freeze"/>
+            <animateMotion path="M0,0 L0,45 L-120,45" dur="0.8s" begin="5.5s" fill="freeze"/>
+        </rect>
+    </g>
+
+    <!-- Animation restart trigger -->
+    <animate attributeName="opacity" from="1" to="1" dur="8s" repeatCount="indefinite" id="restartAnimation"/>
+</svg>
