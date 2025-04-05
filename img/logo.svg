@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 90" class="threadpool-logo">
+    <style>
+        :root {
+        --tp-background: #13161F;
+        --tp-core-base: #1E293B;
+        --tp-thread-lines: #3B82F6;
+        --tp-parallel-lines: #2ECC71;
+        --tp-pulse-color: #2ECC71;
+        --tp-pulse-opacity-max: 0.7;
+        --tp-pulse-opacity-min: 0.3;
+        }
+
+        .threadpool-logo .background {
+        fill: var(--tp-background);
+        }
+
+        .threadpool-logo .core, .threadpool-logo .thread-line {
+        stroke-width: 5;
+        }
+
+        .threadpool-logo .core {
+        fill: var(--tp-core-base);
+        stroke: var(--tp-thread-lines);
+        }
+
+        .threadpool-logo .thread-line {
+        stroke: var(--tp-thread-lines);
+        }
+
+        .threadpool-logo .parallel-line {
+        stroke: var(--tp-parallel-lines);
+        stroke-width: 3;
+        }
+
+        .threadpool-logo #pulse-gradient stop:first-child {
+        stop-color: var(--tp-pulse-color);
+        stop-opacity: var(--tp-pulse-opacity-max);
+        }
+
+        .threadpool-logo #pulse-gradient stop:last-child {
+        stop-color: var(--tp-pulse-color);
+        stop-opacity: 0;
+        }
+    </style>
+
+    <!-- Background -->
+    <rect width="100%" height="100%" rx="3" ry="3" class="background"/>
+
+    <!-- Central core (thread pool manager) -->
+    <g style="transform: translate(50%, 50%)">
+        <circle cx="0" cy="0" r="35" class="core"/>
+
+        <!-- Radiating lines representing managed threads -->
+        <g id="thread-lines">
+            <line x1="0" y1="-15" x2="0" y2="-35" class="thread-line"/>
+            <!--<line x1="13" y1="-7.5" x2="30.3" y2="-17.5" class="thread-line"/>-->
+            <!--<line x1="13" y1="7.5" x2="30.3" y2="17.5" class="thread-line"/>-->
+            <line x1="0" y1="16" x2="0" y2="35" class="thread-line"/>
+            <!--<line x1="-13" y1="7.5" x2="-30.3" y2="17.5" class="thread-line"/>-->
+            <!--<line x1="-13" y1="-7.5" x2="-30.3" y2="-17.5" class="thread-line"/>-->
+        </g>
+
+        <!-- Parallel lines within core representing parallelism -->
+        <g id="core-parallel-lines">
+            <line x1="-15" y1="-10" x2="15" y2="-10" class="parallel-line"/>
+            <line x1="-15" y1="-3" x2="15" y2="-3" class="parallel-line"/>
+            <line x1="-15" y1="4" x2="15" y2="4" class="parallel-line"/>
+            <line x1="-15" y1="11" x2="15" y2="11" class="parallel-line"/>
+        </g>
+
+        <!-- Pulsing effect for the core -->
+        <circle cx="0" cy="0" r="35" fill="url(#pulse-gradient)">
+            <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2.75s" repeatCount="indefinite"/>
+        </circle>
+    </g>
+
+    <!-- Gradient definitions -->
+    <defs>
+        <radialGradient id="pulse-gradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" stop-opacity="0.7"/>
+            <stop offset="100%" stop-opacity="0"/>
+        </radialGradient>
+    </defs>
+</svg>

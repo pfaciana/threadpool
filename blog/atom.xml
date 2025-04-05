@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xsl" href="atom.xsl"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://pfaciana.github.io/threadpool/blog</id>
+    <title>ThreadPool Blog</title>
+    <updated>2025-01-01T00:00:00.000Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://pfaciana.github.io/threadpool/blog"/>
+    <subtitle>ThreadPool Blog</subtitle>
+    <icon>https://pfaciana.github.io/threadpool/img/favicon.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Welcome]]></title>
+        <id>https://pfaciana.github.io/threadpool/blog/welcome</id>
+        <link href="https://pfaciana.github.io/threadpool/blog/welcome"/>
+        <updated>2025-01-01T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Welcome to the System Resource Monitor project documentation!]]></summary>
+        <content type="html"><![CDATA[<p>Welcome to the System Resource Monitor project documentation!</p>]]></content>
+        <author>
+            <name>Phillip Faciana</name>
+            <uri>https://renderdev.com</uri>
+        </author>
+        <category label="hello" term="hello"/>
+    </entry>
+</feed>
