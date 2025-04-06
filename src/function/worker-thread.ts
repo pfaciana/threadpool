@@ -6,12 +6,15 @@
  * executes their methods or returns their properties, then sends the results
  * back to the main thread.
  *
- * @module worker-thread
  * @private
  */
 import { parentPort, workerData } from 'node:worker_threads'
 
-// Import the requested module based on the filename provided in workerData
+/**
+ * The imported module requested by the main thread.
+ * This is dynamically loaded based on the filename provided in workerData.
+ * @private
+ */
 const imported = await import(workerData.filename)
 
 /**
@@ -48,13 +51,20 @@ const sendMessage = async (message): Promise<void> => {
 	}
 }
 
-// Process the initial message passed via workerData
-// NOTE: if this is open thread, this call does not postMessage
-// because there is no `property` or `method`, which is expected
-// If this is a closed thread, then this is the only postMessage sent
+/**
+ * Process the initial message passed via workerData.
+ * NOTE: if this is open thread, this call does not postMessage
+ * because there is no `property` or `method`, which is expected.
+ * If this is a closed thread, then this is the only postMessage sent.
+ * @private
+ */
 sendMessage(workerData)
 
-// Listen for additional messages from the main thread
+/**
+ * Set up a listener for additional messages from the main thread.
+ * This allows the worker to process multiple requests over its lifetime.
+ * @private
+ */
 parentPort?.on('message', sendMessage)
 
 export {}

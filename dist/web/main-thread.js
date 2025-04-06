@@ -1,7 +1,12 @@
 import { importWorkerProxy } from '../utils/importWorkerProxy.js';
 
-// We are hard coding the JS version of the worker file here, because we don't want
-// the end user to have to worry about saving the worker file to their deployment
+/**
+ * Internal worker script content as a data URL.
+ * This is used as a fallback when no custom worker URL is provided.
+ * We are hard coding the JS version of the worker file here, because we don't want
+ * the end user to have to worry about saving the worker file to their deployment.
+ * @private
+ */
 const dataURL = 'data:application/javascript,' + encodeURIComponent(`
 const sendMessage = (port) => async (event) => {
 	const { filename, property, method, args } = event.data

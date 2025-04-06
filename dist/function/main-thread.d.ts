@@ -90,7 +90,7 @@ console.log(await fib(42)); // 267914296
 
 // Each call creates a new worker
 const sum = await importWorker<typeof MathModule>('./math.js').add(5, 10);
- * ```
+```
  */
 export declare const importWorker: <T>(filename: string | URL, workerOptions?: WorkerOptions, messageOptions?: MessageOptions) => Promise<PromisifyModule<T>>;
 /**

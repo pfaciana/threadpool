@@ -3,6 +3,44 @@ import { Worker } from 'node:worker_threads';
 import { importWorkerProxy } from '../utils/importWorkerProxy.js';
 
 /**
+ * Internal worker script content as a data URL.
+ * This is used as a fallback when no custom worker script path is provided.
+ *
+ * We must inline the worker script as a data URL because of Deno and JSR.
+ * Deno's data integrity check pull for jsr.io and file import breaks because
+ * it thinks its coming from a HTTP URL, which is not supported.
+ * @private
+ */
+const dataURL = `data:application/javascript,
+import { parentPort, workerData } from 'node:worker_threads';
+
+const imported = await import(workerData.filename);
+
+const sendMessage = async (message) => {
+	const { property, method, args } = message;
+
+	try {
+		if (property) {
+			parentPort.postMessage(imported[property]);
+		}
+
+		if (method) {
+			parentPort.postMessage(await imported[method](...(args || [])));
+		}
+	} catch (error) {
+		if (error instanceof Error) {
+			parentPort.postMessage({ error });
+		} else {
+			parentPort.postMessage({ error });
+		}
+	}
+};
+
+sendMessage(workerData);
+
+parentPort.on('message', sendMessage);
+`;
+/**
  * Path to the worker script file.
  * @private
  */
@@ -40,7 +78,15 @@ const setWorkerFile = (filename) => {
  * ```
  */
 const getWorkerFile = () => {
-    return workerFile || new URL(`worker-thread${import.meta.url.substring(import.meta.url.lastIndexOf('.'))}`, import.meta.url);
+    if (workerFile) {
+        return workerFile;
+    }
+    // This bug fix is needed because Deno and JSR will try and import the file from http:// protocol and this will fail
+    if (import.meta.url.startsWith('file://')) {
+        return new URL(`worker-thread${import.meta.url.substring(import.meta.url.lastIndexOf('.'))}`, import.meta.url);
+    }
+    // So in the Deno/JSR case, fallback to a hardcoded data URL
+    return dataURL;
 };
 /**
  * Creates a promise for communication with a worker.
@@ -140,7 +186,7 @@ console.log(await fib(42)); // 267914296
 
 // Each call creates a new worker
 const sum = await importWorker<typeof MathModule>('./math.js').add(5, 10);
- * ```
+```
  */
 const importWorker = (filename, workerOptions = {}, messageOptions = {}) => {
     return importWorkerProxy(filename, {

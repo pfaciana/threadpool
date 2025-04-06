@@ -7,7 +7,6 @@
  *
  * This file works with both DedicatedWorker and SharedWorker implementations.
  *
- * @module worker-thread
  * @private
  */
 /**
@@ -34,7 +33,12 @@ const sendMessage = (port) => async (event) => {
         port.postMessage({ error: error.message });
     }
 };
-// Set up appropriate event handlers based on worker type
+/**
+ * Set up appropriate event handlers based on worker type.
+ * This code detects whether it's running in a DedicatedWorker or SharedWorker
+ * and sets up the appropriate event listeners.
+ * @private
+ */
 if (!!self.DedicatedWorkerGlobalScope) {
     // DedicatedWorker setup
     self.addEventListener('message', sendMessage(self));

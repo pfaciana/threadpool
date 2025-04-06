@@ -7,7 +7,6 @@
  *
  * This file works with both DedicatedWorker and SharedWorker implementations.
  *
- * @module worker-thread
  * @private
  */
 export {};
