@@ -11,8 +11,6 @@
  * - Function-based thread management for simpler APIs
  * - Promise-compatible API with full TypeScript support
  *
- * @module threadpool
- *
  * @example
  * ```ts
  * // Node.js example
@@ -32,6 +30,8 @@
  *   console.log(`Result: ${data}`);
  * });
  * ```
+ *
+ * @module threadpool
  */
 /**
  * Core status tracking types and classes

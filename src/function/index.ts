@@ -1,4 +1,45 @@
 /**
+ * Function-based thread management for ThreadPool.
+ *
+ * This module provides a lightweight thread abstraction that works with simple JavaScript functions.
+ * It wraps Node.js worker threads in a easy-to-use API that maintains consistent behavior with the
+ * rest of the threadpool library while handling worker creation and communication automatically.
+ *
+ * Key features:
+ * - Run functions in separate threads without manually creating workers
+ * - Consistent API with status tracking for all function thread operations
+ * - Simplified worker importing via proxy-based helper functions
+ * - Promise-compatible interface for easy integration with async code
+ *
+ * @example
+ * ```ts
+ * import { FunctionPool, importWorker } from "@renderdev/threadpool/function";
+ * import type * as mathModule from "./math.js";
+ *
+ * // Create a pool for running functions
+ * const pool = new FunctionPool({ maxThreads: 4 });
+ *
+ * // Import a module to use in worker threads
+ * const { fibonacci } = await importWorker<typeof mathModule>("./math.js");
+ *
+ * // Add computation tasks to the pool
+ * for (let n = 35; n <= 45; n++) {
+ *   pool.addTask(async () => {
+ *     const result = await fibonacci(n);
+ *     return { n, result };
+ *   });
+ * }
+ *
+ * // Get results as they complete
+ * pool.on("message", (data) => {
+ *   console.log(`Fibonacci(${data.n}) = ${data.result}`);
+ * });
+ * ```
+ *
+ * @module threadpool/function
+ */
+
+/**
  * Core status tracking types and classes
  *
  * These utilities provide foundational status tracking for thread and pool operations.
